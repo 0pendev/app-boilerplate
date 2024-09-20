@@ -32,3 +32,7 @@ doc/latex
 
 # Virtual env for sideload (macOS and Windows)
 ledger/
+
+# Compilation database used for code completion
+compile_commands.json
+.cache

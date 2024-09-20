@@ -5,22 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Native Debug - Remote debug",
             "type": "gdb",
-            "request": "attach",
-            "name": "Attach to gdbserver",
-            "executable": "${workspaceFolder}/bin/app.elf",
-            "target": ":1234",
-            "remote": true,
+            "request": "launch",
             "cwd": "${workspaceFolder}",
-            "valuesFormatting": "parseText",
-            "gdbpath": "gdb-multiarch",
+            "gdbpath" : "gdb-multiarch",
+            "target": "${workspaceFolder}/build/${input:device}/bin/app.elf",
             "autorun": [
-                "set architecture arm",
-                "handle SIGILL nostop pass noprint",
-                "add-symbol-file ${workspaceFolder}/bin/app.elf 0x40000000",
-                "b *0x40000000",
-                "c"
+                "source -v ${workspaceFolder}/.vscode/debug.gdb",
+                "load-app \"${workspaceFolder}/build/${input:device}/bin/app.elf\""
+            ],
+        }
+    ],
+    "inputs": [
+        {
+            "id": "device",
+            "description": "Ledger device you want to use",
+            "default": "nanox",
+            "type": "pickString",
+            "options": [
+                "nanox",
+                "nanos",
+                "flex",
+                "stax"
             ]
         }
-    ]
+    ],
 }

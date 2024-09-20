@@ -1,0 +1,223 @@
+{
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "target",
+            "description": "Ledger device you want to use",
+            "default": "NANOX",
+            "type": "pickString",
+            "options": [
+                "NANOX",
+                "NANOS",
+                "NANOSP",
+                "FLEX",
+                "STAX"
+            ]
+        },
+        {
+            "id": "device",
+            "description": "Ledger device you want to use",
+            "default": "nanox",
+            "type": "pickString",
+            "options": [
+                "nanox",
+                "nanos",
+                "nanosp",
+                "flex",
+                "stax"
+            ]
+        },
+        {
+            "id": "usecase",
+            "description": "Use case",
+            "default": "release",
+            "type": "pickString",
+            "options": [
+                "release",
+                "debug"
+            ]
+        },
+        {
+            "id": "variant",
+            "description": "Variant",
+            "default": "BOL",
+            "type": "pickString",
+            "options": [
+                "BOL"
+            ]
+        }
+    ],
+    "tasks": [
+        {
+            "label": "Ledger - Git Submodule Update",
+            "type": "shell",
+            "command": "git submodule update --init --recursive",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Build Full",
+            "type": "shell",
+            "command": "make -B -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Ledger - Git Submodule Update"
+            ],
+            "dependsOrder": "sequence",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            }
+        },
+        {
+            "label": "Ledger - Build Incremental",
+            "type": "shell",
+            "command": "make -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
+            "group": "build",
+            "dependsOn": [
+                "Ledger - Git Submodule Update"
+            ],
+            "dependsOrder": "sequence",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            }
+        },
+        {
+            "label": "Ledger - Build Debug",
+            "type": "shell",
+            "command": "make -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK DEBUG=1",
+            "group": "build",
+            "dependsOn": [
+                "Ledger - Git Submodule Update"
+            ],
+            "dependsOrder": "sequence",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            }
+        },
+        {
+            "label": "Ledger - Clean the Build Folder",
+            "type": "shell",
+            "command": "make clean",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Install Tests requirements",
+            "type": "shell",
+            "command": "apk add gcc musl-dev python3-dev qt5-qtbase-dev py3-qt5 qemu-arm bear; ln -f -s /usr/bin/qemu-arm /usr/bin/qemu-arm-static",
+            "group": "test",
+        },
+        {
+            "label": "Ledger - Configure project",
+            "type": "shell",
+            "command": "rm -f compile_commands.json; bear -- make -B -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
+            "group": "build",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Ledger - Clean the Build Folder",
+                "Ledger - Install Tests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Install Pytests requirements",
+            "type": "shell",
+            "command": "[ -f tests/requirements.txt ]; pip install --break-system-packages -r  tests/requirements.txt",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Tests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PATH": "${env:PATH}:/usr/lib/qt5/bin"
+                }
+            }
+        },
+        {
+            "label": "Ledger - Golden run",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/venv/bin/activate; pytest tests --tb=short -v --device ${input:device} --golden_run",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+            }
+        },
+        {
+            "label": "Ledger - Kill Emulator",
+            "type": "shell",
+            "command": "pkill -f speculos",
+            "group": "test",
+        },
+        {
+            "label": "Ledger - Run Tests",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/venv/bin/activate; pytest ./tests/ --tb=short -v --device ${input:device}",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Run Tests with Display",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/venv/bin/activate; pytest ./tests/ --tb=short -v --device ${input:device} --display",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Run Tests with Display on Device - Execute",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/venv/bin/activate; pytest ./tests/ --tb=short -v --device ${input:device} --display --backend ledgerwallet",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Run with Emulator",
+            "type": "shell",
+            "command": "speculos --model ${input:device} ${workspaceFolder}/bin/app.elf",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Ledger - Run with Emulator in debug",
+            "type": "shell",
+            "command": "speculos --model ${input:device} ${workspaceFolder}/bin/app.elf -d",
+            "group": "test",
+            "dependsOn": [
+                "Ledger - Install Pytests requirements"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+        }
+    ]
+}

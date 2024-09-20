@@ -1,0 +1,26 @@
+{
+	"image": "localhost/next/ledger-app-builder:lite",
+	"remoteUser": "root",
+	"mounts": [
+		{
+		    "type": "bind",
+			"source": "/tmp/.X11-unix",
+			"target": "/tmp/.X11-unix"
+		}
+	],
+	"containerEnv": { 
+		"DISPLAY": "${localEnv:DISPLAY}"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"iulian-radu-at.vscode-tasks-sidebar",
+				"ms-vscode.makefile-tools",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"webfreak.debug",
+				"ms-python.python",
+				"ms-python.debugpy",
+			]
+		}
+	}
+}
