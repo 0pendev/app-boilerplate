@@ -2,7 +2,7 @@
     "files.associations": {
         "*.h": "c"
     },
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "python.terminal.activateEnvironment": false,
     "git.ignoreLimitWarning": true,
     "python.testing.pytestArgs": [
@@ -10,4 +10,7 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "mesonbuild.configureOnOpen": false,
+    "mesonbuild.downloadLanguageServer": true,
+    "mesonbuild.formatting.enabled": true,
 }

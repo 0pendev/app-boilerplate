@@ -1,0 +1,14 @@
+[binaries]
+c = '/opt/clang+llvm-12.0.1-x86_64-linux-gnu-ubuntu-/bin/clang'
+cpp = '/opt/clang+llvm-12.0.1-x86_64-linux-gnu-ubuntu-/bin/clang'
+as = 'arm-none-eabi-gcc'
+strip = 'arm-none-eabi-strip'
+
+[host_machine]
+system = 'any'
+cpu_family = 'arm'
+cpu = 'arm'
+endian = 'little'
+
+[built-in options]
+c_args = ['--sysroot=/usr/arm-linux-gnueabi']

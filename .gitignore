@@ -36,3 +36,8 @@ ledger/
 # Compilation database used for code completion
 compile_commands.json
 .cache
+
+# Meson
+builddir
+/subprojects/*
+!/subprojects/*.wrap

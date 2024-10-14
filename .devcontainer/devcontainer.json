@@ -3,13 +3,13 @@
 	"remoteUser": "root",
 	"mounts": [
 		{
-		    "type": "bind",
+			"type": "bind",
 			"source": "/tmp/.X11-unix",
 			"target": "/tmp/.X11-unix"
 		}
 	],
-	"containerEnv": { 
-		"DISPLAY": "${localEnv:DISPLAY}"
+	"containerEnv": {
+		"DISPLAY": ":0"
 	},
 	"customizations": {
 		"vscode": {
@@ -20,6 +20,7 @@
 				"webfreak.debug",
 				"ms-python.python",
 				"ms-python.debugpy",
+				"mesonbuild.mesonbuild"
 			]
 		}
 	}
