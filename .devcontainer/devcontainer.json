@@ -20,7 +20,7 @@
 				"webfreak.debug",
 				"ms-python.python",
 				"ms-python.debugpy",
-				"mesonbuild.mesonbuild"
+				"ms-vscode.cmake-tools"
 			]
 		}
 	}
