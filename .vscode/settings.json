@@ -12,9 +12,7 @@
     "python.testing.pytestEnabled": true,
     "cmake.configureOnEdit": true,
     "cmake.configureSettings": {
-        "SDK": "/opt/flex-secure-sdk",
-        "TARGET_DEVICE": "flex",
-        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/toolchains/flex.txt",
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/toolchains/flex.cmake",
         "ENABLE_BLUETOOTH": true
     }
 }

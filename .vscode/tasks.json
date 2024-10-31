@@ -58,73 +58,10 @@
             }
         },
         {
-            "label": "Ledger - Build Full",
-            "type": "shell",
-            "command": "make -B -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
-            "group": "build",
-            "problemMatcher": [],
-            "dependsOn": [
-                "Ledger - Git Submodule Update"
-            ],
-            "dependsOrder": "sequence",
-            "options": {
-                "cwd": "${workspaceFolder}",
-            }
-        },
-        {
-            "label": "Ledger - Build Incremental",
-            "type": "shell",
-            "command": "make -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
-            "group": "build",
-            "dependsOn": [
-                "Ledger - Git Submodule Update"
-            ],
-            "dependsOrder": "sequence",
-            "options": {
-                "cwd": "${workspaceFolder}",
-            }
-        },
-        {
-            "label": "Ledger - Build Debug",
-            "type": "shell",
-            "command": "make -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK DEBUG=1",
-            "group": "build",
-            "dependsOn": [
-                "Ledger - Git Submodule Update"
-            ],
-            "dependsOrder": "sequence",
-            "options": {
-                "cwd": "${workspaceFolder}",
-            }
-        },
-        {
-            "label": "Ledger - Clean the Build Folder",
-            "type": "shell",
-            "command": "make clean",
-            "group": "build",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
-        },
-        {
             "label": "Ledger - Install Tests requirements",
             "type": "shell",
-            "command": "apk add gcc musl-dev python3-dev qt5-qtbase-dev py3-qt5 qemu-arm bear; ln -f -s /usr/bin/qemu-arm /usr/bin/qemu-arm-static",
+            "command": "apt install python3-dev qemu-user-static libgl1-mesa-glx libglib2.0-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdbus-1-3",
             "group": "test",
-        },
-        {
-            "label": "Ledger - Configure project",
-            "type": "shell",
-            "command": "rm -f compile_commands.json; bear -- make -B -j COIN=${input:variant} BOLOS_SDK=$${input:target}_SDK",
-            "group": "build",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Ledger - Clean the Build Folder",
-                "Ledger - Install Tests requirements"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            }
         },
         {
             "label": "Ledger - Install Pytests requirements",
@@ -198,7 +135,7 @@
         {
             "label": "Ledger - Run with Emulator",
             "type": "shell",
-            "command": "speculos --model ${input:device} ${workspaceFolder}/bin/app.elf",
+            "command": "speculos --model ${input:device} ${workspaceFolder}/build/app.elf",
             "group": "test",
             "dependsOn": [
                 "Ledger - Install Pytests requirements"

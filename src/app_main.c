@@ -21,12 +21,12 @@
 #include "os.h"
 #include "ux.h"
 
-#include "types.h"
+#include "apdu/dispatcher.h"
 #include "globals.h"
 #include "io.h"
 #include "sw.h"
-#include "menu.h"
-#include "dispatcher.h"
+#include "types.h"
+#include "ui/menu.h"
 
 global_ctx_t G_context;
 
@@ -50,10 +50,11 @@ void app_main() {
 
     // Initialize the NVM data if required
     if (N_storage.initialized != 0x01) {
-        internal_storage_t storage;
-        storage.dummy1_allowed = 0x00;
-        storage.dummy2_allowed = 0x00;
-        storage.initialized = 0x01;
+        internal_storage_t storage = {
+            .dummy1_allowed = 0x00,
+            .dummy2_allowed = 0x00,
+            .initialized = 0x00,
+        };
         nvm_write((void *) &N_storage, &storage, sizeof(internal_storage_t));
     }
 

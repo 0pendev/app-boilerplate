@@ -15,7 +15,6 @@
 		"vscode": {
 			"extensions": [
 				"iulian-radu-at.vscode-tasks-sidebar",
-				"ms-vscode.makefile-tools",
 				"llvm-vs-code-extensions.vscode-clangd",
 				"webfreak.debug",
 				"ms-python.python",
