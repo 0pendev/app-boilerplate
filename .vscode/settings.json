@@ -14,5 +14,8 @@
     "cmake.configureSettings": {
         "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/toolchains/flex.cmake",
         "ENABLE_BLUETOOTH": true
-    }
+    },
+    "cmake.generator": "Ninja",
+    "cmake.buildDirectory": "${workspaceFolder}/builddir",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

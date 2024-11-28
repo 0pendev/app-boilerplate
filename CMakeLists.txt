@@ -526,7 +526,7 @@ target_link_libraries(blewbxx PUBLIC osinterface cxnginterface)
 target_compile_options(blewbxx PRIVATE ${LEDGER_C_FLAGS})
 target_compile_definitions(blewbxx PRIVATE ${DEFINES})
 if(ENABLE_BLUETOOTH)
-    target_link_library(extrafeatures PUBLIC blewbxx)
+    target_link_libraries(extrafeatures INTERFACE blewbxx)
 endif()
 
 if(USE_NBGL)

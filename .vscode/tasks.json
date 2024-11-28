@@ -135,7 +135,7 @@
         {
             "label": "Ledger - Run with Emulator",
             "type": "shell",
-            "command": "speculos --model ${input:device} ${workspaceFolder}/build/app.elf",
+            "command": "speculos --model ${input:device} ${workspaceFolder}/builddir/app.elf",
             "group": "test",
             "dependsOn": [
                 "Ledger - Install Pytests requirements"
@@ -147,7 +147,7 @@
         {
             "label": "Ledger - Run with Emulator in debug",
             "type": "shell",
-            "command": "speculos --model ${input:device} ${workspaceFolder}/bin/app.elf -d",
+            "command": "speculos --model ${input:device} ${workspaceFolder}/builddir/app.elf -d",
             "group": "test",
             "dependsOn": [
                 "Ledger - Install Pytests requirements"

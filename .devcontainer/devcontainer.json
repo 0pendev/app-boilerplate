@@ -15,11 +15,11 @@
 		"vscode": {
 			"extensions": [
 				"iulian-radu-at.vscode-tasks-sidebar",
-				"llvm-vs-code-extensions.vscode-clangd",
 				"webfreak.debug",
 				"ms-python.python",
 				"ms-python.debugpy",
-				"ms-vscode.cmake-tools"
+				"ms-vscode.cmake-tools",
+				"ms-vscode.cpptools"
 			]
 		}
 	}

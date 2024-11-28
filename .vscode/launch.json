@@ -9,26 +9,12 @@
             "type": "gdb",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "gdbpath" : "gdb-multiarch",
-            "target": "${workspaceFolder}/build/${input:device}/bin/app.elf",
+            "gdbpath": "gdb-multiarch",
+            "target": "${workspaceFolder}/builddir/app.elf",
             "autorun": [
                 "source -v ${workspaceFolder}/.vscode/debug.gdb",
-                "load-app \"${workspaceFolder}/build/${input:device}/bin/app.elf\""
+                "load-app \"${workspaceFolder}/builddir/app.elf\""
             ],
         }
-    ],
-    "inputs": [
-        {
-            "id": "device",
-            "description": "Ledger device you want to use",
-            "default": "nanox",
-            "type": "pickString",
-            "options": [
-                "nanox",
-                "nanos",
-                "flex",
-                "stax"
-            ]
-        }
-    ],
+    ]
 }
