@@ -12,7 +12,7 @@ set(CMAKE_CXX_COMPILER ${LEDGER_CLANG})
 set(TARGET_DEVICE nanosplus CACHE INTERNAL "Ledger device the build targets")
 set(TARGET_SDKNAME nanos2 CACHE INTERNAL "the name used in the folder target of the secure SDK")
 set(TARGET_ASM_FLAGS --target=armv8m-none-eabi -mcpu=cortex-m35p+nodsp -mthumb CACHE INTERNAL "Flags used when build .s and .S files")
-set(TARGET_C_FLAGS --sysroot=/usr/arm-linux-gnueabi --target=armv8m-none-eabi -frwpi -mcpu=cortex-m35p+nodsp -mno-movt -msoft-float -mthumb -mtune=cortex-m35p+nodsp CACHE INTERNAL "CFLAGS used for the compilation")
+set(TARGET_C_FLAGS --sysroot=/usr/arm-linux-gnueabi --target=armv8m-none-eabi -frwpi -mcpu=cortex-m35p+nodsp -mno-movt -msoft-float -mthumb -mtune=cortex-m35p+nodsp -fropi -mno-unaligned-access CACHE INTERNAL "CFLAGS used for the compilation")
 set(TARGET_LD_FLAGS --target=armv8m-none-eabi -mcpu=cortex-m35p+nodsp -mlittle-endian -mno-movt -momit-leaf-frame-pointer -nodefaultlibs -nostdlib CACHE INTERNAL "LDFLAGS used for the compilation")
 
 # Cryptographic definitions

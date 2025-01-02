@@ -244,15 +244,15 @@ file(GLOB_RECURSE GLYPH_FILES ${GLYPH_PATHS})
 #####################################################################
 set(DEFINES ${DEFINES} API_LEVEL=${API_LEVEL} APPNAME="${APP_NAME}" APPVERSION="${APP_VERSION}" SDK_HASH="${SDK_HASH}" SDK_NAME="${SDK_NAME}" SDK_VERSION="${SDK_VERSION}" TARGET="${TARGET_DEVICE}" TARGET_NAME="${TARGET_DEVICE}" __IO=volatile gcc NDEBUG)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Og -g1)
-    set(LEDGER_ASM_FLAGS ${LEDGER_ASM_FLAGS} -Og -g1)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR ENABLE_FUZZ)
+    set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Og -g3)
+    set(LEDGER_ASM_FLAGS ${LEDGER_ASM_FLAGS} -Og -g3)
 else()
     set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Oz -g0)
     set(LEDGER_ASM_FLAGS ${LEDGER_ASM_FLAGS} -Oz -g0)
 endif()
 
-set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Wall -Werror=int-to-pointer-cast -Wextra -Wextra -Wformat-security -Wformat-security -Wformat=2 -Wimplicit-fallthrough -Wno-error=int-conversion -Wno-main -Wshadow -Wundef -Wvla -Wwrite-strings -fdata-sections -ffunction-sections -fno-common -fno-jump-tables -fomit-frame-pointer -fropi -fshort-enums -funsigned-char -mlittle-endian -mno-unaligned-access -momit-leaf-frame-pointer)
+set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Wall -Werror=int-to-pointer-cast -Wextra -Wextra -Wformat-security -Wformat-security -Wformat=2 -Wimplicit-fallthrough -Wno-error=int-conversion -Wno-main -Wshadow -Wundef -Wvla -Wwrite-strings -fdata-sections -ffunction-sections -fno-common -fno-jump-tables -fomit-frame-pointer -fshort-enums -funsigned-char -mlittle-endian -momit-leaf-frame-pointer)
 
 if(ENABLE_SDK_WERROR)
     set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Werror)
@@ -468,11 +468,13 @@ else()
     )
 endif()
 
-set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -L${SDK}/target/${TARGET_SDKNAME})
-if(IS_PLUGIN)
-    set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -T${SDK}/target/${TARGET_SDKNAME}/plugin_script.ld)
-else()
-    set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -T${SDK}/target/${TARGET_SDKNAME}/script.ld)
+if(NOT ENABLE_FUZZ)
+    set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -L${SDK}/target/${TARGET_SDKNAME})
+    if(IS_PLUGIN)
+        set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -T${SDK}/target/${TARGET_SDKNAME}/plugin_script.ld)
+    else()
+        set(LEDGER_LD_FLAGS ${LEDGER_LD_FLAGS} -T${SDK}/target/${TARGET_SDKNAME}/script.ld)
+    endif()
 endif()
 
 add_library(miscinterface INTERFACE)
@@ -505,20 +507,28 @@ if(ENABLE_BLUETOOTH AND TARGET_DEVICE IN_LIST WITH_BLUETOOTH)
 endif()
 
 if(USE_NBGL)
+    add_library(nbglinterface INTERFACE)
+    target_include_directories(nbglinterface INTERFACE ${SDK}/lib_nbgl/include ${SDK}/lib_ux_nbgl ${SDK}/lib_ux_nbgl/include)
+
     add_library(glyphs STATIC EXCLUDE_FROM_ALL ${GEN_GLYPHS_DIR}/glyphs.c)
     target_include_directories(glyphs INTERFACE ${GEN_GLYPHS_DIR})
-    target_link_libraries(glyphs PUBLIC miscinterface nbgl)
+    target_link_libraries(glyphs PUBLIC miscinterface nbglinterface)
     add_dependencies(glyphs genglyphs)
     target_compile_options(glyphs PRIVATE ${LEDGER_C_FLAGS})
     target_compile_definitions(glyphs PRIVATE ${DEFINES})
 
     file(GLOB_RECURSE NBGL_SOURCES ${SDK}/lib_nbgl/src/*.c ${SDK}/lib_ux_nbgl/*.c)
     add_library(nbgl STATIC EXCLUDE_FROM_ALL ${NBGL_SOURCES})
-    target_include_directories(nbgl PUBLIC ${SDK}/lib_nbgl/include ${SDK}/lib_ux_nbgl ${SDK}/lib_ux_nbgl/include)
-    target_link_libraries(nbgl PUBLIC miscinterface glyphs cxnginterface)
+    target_link_libraries(nbgl PUBLIC nbglinterface miscinterface glyphs cxnginterface)
     target_compile_options(nbgl PRIVATE ${LEDGER_C_FLAGS})
     target_compile_definitions(nbgl PRIVATE ${DEFINES})
-    add_library(graphics ALIAS nbgl)
+
+    if(ENABLE_FUZZ)
+        target_link_libraries(nbglinterface INTERFACE glyphs)
+        add_library(graphics ALIAS nbglinterface)
+    else()    
+        add_library(graphics ALIAS nbgl)
+    endif()
 else()
     file(GLOB_RECURSE BAGL_SOURCES ${SDK}/lib_bagl/*.c)
     add_library(bagl STATIC EXCLUDE_FROM_ALL ${BAGL_SOURCES})
@@ -551,6 +561,10 @@ target_compile_options(stusb PRIVATE ${LEDGER_C_FLAGS})
 target_compile_definitions(stusb PRIVATE ${DEFINES})
 
 file(GLOB_RECURSE STANDARD_SOURCES ${SDK}/lib_standard_app/*.c)
+if (ENABLE_FUZZ)
+    list(FILTER STANDARD_SOURCES EXCLUDE REGEX ".*main\\.c$")
+    message("${STANDARD_SOURCES}")
+endif()
 add_library(standard STATIC EXCLUDE_FROM_ALL ${STANDARD_SOURCES})
 target_link_libraries(standard PUBLIC miscinterface cxnginterface graphics)
 target_include_directories(standard PUBLIC ${SDK}/lib_standard_app)
@@ -569,5 +583,39 @@ add_library(stub STATIC EXCLUDE_FROM_ALL ${STUB_SOURCES})
 target_link_libraries(stub PRIVATE miscinterface)
 target_compile_options(stub PRIVATE ${LEDGER_ASM_FLAGS})
 
+if(ENBALE_FUZZ)
+    return()
+endif()
+
 # LibC needed for the build of the app
 set(ST_NEWLIB_PATH ${SDK}/arch/st33k1/lib CACHE INTERNAL "Newlib needed for the device we target")
+# Map File used to generate the APDUs
+set(MAP_FILE "${CMAKE_CURRENT_BINARY_DIR}/app.map")
+add_executable(app.elf ${APP_SOURCES})
+target_include_directories(app.elf PRIVATE ${APP_INCLUDE_DIR})
+target_link_directories(app.elf PRIVATE ${ST_NEWLIB_PATH})
+target_link_libraries(app.elf PRIVATE glyphs printf misc standard stub graphics gcc c)
+target_link_options(app.elf PUBLIC ${LEDGER_LD_FLAGS} LINKER:-Map=${MAP_FILE})
+target_compile_options(app.elf PRIVATE ${LEDGER_C_FLAGS})
+target_compile_definitions(app.elf PRIVATE ${DEFINES})
+
+add_custom_target(
+    hex
+    COMMAND ${OBJCOPY_EXECUTABLE} -O ihex -S $<TARGET_FILE:app.elf> ${CMAKE_CURRENT_BINARY_DIR}/app.hex
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/app.hex
+    DEPENDS app.elf
+)
+
+add_custom_target(
+    apdu
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ledgerblue_wrapper.py ${MAP_FILE} ${APP_LOAD_PARAMS} --offline ${CMAKE_CURRENT_BINARY_DIR}/app.apdu
+    BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/app.apdu ${CMAKE_CURRENT_BINARY_DIR}/app.sha256
+    DEPENDS hex
+)
+
+add_custom_target(
+    load
+    EXCLUDE_FROM_ALL
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ledgerblue_wrapper.py ${APP_LOAD_PARAMS}
+    DEPENDS app.apdu
+)

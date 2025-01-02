@@ -18,7 +18,6 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     char tx_memo[466] = {0};
 
     memset(&tx, 0, sizeof(tx));
-
     status = transaction_deserialize(&buf, &tx);
 
     if (status == PARSING_OK) {
