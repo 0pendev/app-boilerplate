@@ -1,16 +1,6 @@
 {
 	"image": "localhost/next/ledger-app-builder:lite",
 	"remoteUser": "root",
-	"mounts": [
-		{
-			"type": "bind",
-			"source": "/tmp/.X11-unix",
-			"target": "/tmp/.X11-unix"
-		}
-	],
-	"containerEnv": {
-		"DISPLAY": ":0"
-	},
 	"customizations": {
 		"vscode": {
 			"extensions": [

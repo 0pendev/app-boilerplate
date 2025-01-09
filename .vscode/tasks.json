@@ -58,19 +58,10 @@
             }
         },
         {
-            "label": "Ledger - Install Tests requirements",
-            "type": "shell",
-            "command": "apt install python3-dev qemu-user-static libgl1-mesa-glx libglib2.0-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libdbus-1-3",
-            "group": "test",
-        },
-        {
             "label": "Ledger - Install Pytests requirements",
             "type": "shell",
             "command": "[ -f tests/requirements.txt ]; pip install --break-system-packages -r  tests/requirements.txt",
             "group": "test",
-            "dependsOn": [
-                "Ledger - Install Tests requirements"
-            ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
