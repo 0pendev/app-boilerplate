@@ -22,7 +22,7 @@ set(VARIANT_PARAM COIN)
 set(VARIANT_VALUES 'BOL')
 
 set(ICON_nanox ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_14px.gif)
-set(ICON_nanosplus ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_14px.gif)
+set(ICON_nanosp ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_14px.gif)
 set(ICON_stax ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_32px.gif)
 set(ICON_flex ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_40px.gif)
 set(ICON_NAME ${ICON_${TARGET_DEVICE}})
