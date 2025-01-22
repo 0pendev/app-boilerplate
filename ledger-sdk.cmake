@@ -615,7 +615,6 @@ add_custom_target(
 
 add_custom_target(
     load
-    EXCLUDE_FROM_ALL
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ledgerblue_wrapper.py ${APP_LOAD_PARAMS}
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/ledgerblue_wrapper.py ${MAP_FILE} ${APP_LOAD_PARAMS}
     DEPENDS app.apdu
 )
