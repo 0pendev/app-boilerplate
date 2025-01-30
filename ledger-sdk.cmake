@@ -242,7 +242,7 @@ file(GLOB_RECURSE GLYPH_FILES ${GLYPH_PATHS})
 #####################################################################
 #                               MAKEFILE.defines                    #
 #####################################################################
-set(DEFINES ${DEFINES} API_LEVEL=${API_LEVEL} APPNAME="${APP_NAME}" APPVERSION="${APP_VERSION}" SDK_HASH="${SDK_HASH}" SDK_NAME="${SDK_NAME}" SDK_VERSION="${SDK_VERSION}" TARGET="${TARGET_DEVICE}" TARGET_NAME="${TARGET_DEVICE}" __IO=volatile gcc NDEBUG)
+set(DEFINES ${DEFINES} API_LEVEL=${API_LEVEL} APPNAME="${APP_NAME}" APPVERSION="${APP_VERSION}" SDK_HASH="${SDK_HASH}" SDK_NAME="${SDK_NAME}" SDK_VERSION="${SDK_VERSION}" TARGET="${TARGET_DEVICE}" TARGET_NAME="${TARGET_DEVICE}" ${TARGET_NAME} __IO=volatile gcc NDEBUG)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR ENABLE_FUZZ)
     set(LEDGER_C_FLAGS ${LEDGER_C_FLAGS} -Og -g3)

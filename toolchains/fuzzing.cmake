@@ -44,7 +44,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 # SDK Informations
-set(API_TAG v22.0.0 CACHE INTERNAL "Git Tag to fetch")
+set(API_TAG v22.1.0 CACHE INTERNAL "Git Tag to fetch")
 set(API_LEVEL 22 CACHE INTERNAL "API LEVEL Supported by the target")
 set(SDK_NAME ledger-secure-sdk CACHE INTERNAL "Name of the sdk in use")
 set(CMAKE_BUILD_TYPE "Release")
