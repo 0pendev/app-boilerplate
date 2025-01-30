@@ -2,19 +2,6 @@
     "version": "2.0.0",
     "inputs": [
         {
-            "id": "target",
-            "description": "Ledger device you want to use",
-            "default": "NANOX",
-            "type": "pickString",
-            "options": [
-                "NANOX",
-                "NANOS",
-                "NANOSP",
-                "FLEX",
-                "STAX"
-            ]
-        },
-        {
             "id": "device",
             "description": "Ledger device you want to use",
             "default": "nanox",
@@ -25,25 +12,6 @@
                 "nanosp",
                 "flex",
                 "stax"
-            ]
-        },
-        {
-            "id": "usecase",
-            "description": "Use case",
-            "default": "release",
-            "type": "pickString",
-            "options": [
-                "release",
-                "debug"
-            ]
-        },
-        {
-            "id": "variant",
-            "description": "Variant",
-            "default": "BOL",
-            "type": "pickString",
-            "options": [
-                "BOL"
             ]
         }
     ],
@@ -126,11 +94,8 @@
         {
             "label": "Ledger - Run with Emulator",
             "type": "shell",
-            "command": "speculos --model ${input:device} ${workspaceFolder}/builddir/app.elf",
+            "command": "speculos ${workspaceFolder}/builddir/app.elf",
             "group": "test",
-            "dependsOn": [
-                "Ledger - Install Pytests requirements"
-            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             }
@@ -138,11 +103,8 @@
         {
             "label": "Ledger - Run with Emulator in debug",
             "type": "shell",
-            "command": "speculos --model ${input:device} ${workspaceFolder}/builddir/app.elf -d",
+            "command": "speculos ${workspaceFolder}/builddir/app.elf -d",
             "group": "test",
-            "dependsOn": [
-                "Ledger - Install Pytests requirements"
-            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },

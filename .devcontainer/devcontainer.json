@@ -12,13 +12,18 @@
 				"ms-vscode.cpptools"
 			]
 		}
-	}
-	// vscode does not define XDG_SESSION_TYPE in the container
-	// Qt applications, like speculos, default to X.ORG instead of wayland
+	},
 	// We need to allow the container to open a window on the shared display
+	// when using wayland on linux
 	// "initializeCommand": "xhost + local:",
-	// Another approach is to query it from the host when running on linux
-	// "containerEnv": {
-	//	"XDG_SESSION_TYPE": "${localEnv:XDG_SESSION_TYPE}"
-	// }
+	"containerEnv": {
+		// Some edge cases might need to set specific DISPLAY to connect to
+		// "DISPLAY": ":0",
+		"XDG_SESSION_TYPE": "${localEnv:XDG_SESSION_TYPE}",
+		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}"
+	},
+	"mounts": [
+		{"type": "bind", "source": "${localEnv:XDG_RUNTIME_DIR}", "target": "${localEnv:XDG_RUNTIME_DIR}"},
+		{"type": "bind", "source": "/tmp/.X11-unix", "target": "/tmp/.X11-unix"}
+	]
 }
