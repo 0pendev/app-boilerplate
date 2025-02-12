@@ -12,8 +12,9 @@
     "python.testing.pytestEnabled": true,
     "cmake.configureOnEdit": true,
     "cmake.configureSettings": {
-        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/toolchains/flex.cmake",
-        "ENABLE_BLUETOOTH": true
+        "ENABLE_BLUETOOTH": true,
+        "ENABLE_NBGL_FOR_NANO_DEVICES": true,
+        "NOT_REVIEWED": true
     },
     "cmake.generator": "Ninja",
     "cmake.buildDirectory": "${workspaceFolder}/builddir",

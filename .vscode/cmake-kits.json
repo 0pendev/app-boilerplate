@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Ledger - Nano SP",
+        "description": "Build targeting Ledger Nano SP devices",
+        "toolchainFile": "${workspaceFolder}/toolchains/nanosp.cmake"
+    },
+    {
+        "name": "Ledger - Flex",
+        "description": "Build targeting Ledger Flex devices",
+        "toolchainFile": "${workspaceFolder}/toolchains/flex.cmake"
+    },
+    {
+        "name": "Ledger - Stax",
+        "description": "Build targeting Ledger Stax devices",
+        "toolchainFile": "${workspaceFolder}/toolchains/stax.cmake"
+    },
+    {
+        "name": "Ledger - Fuzzing",
+        "description": "Build meant for fuzzing your Ledger app",
+        "toolchainFile": "${workspaceFolder}/toolchains/fuzzing.cmake"
+    }
+]
