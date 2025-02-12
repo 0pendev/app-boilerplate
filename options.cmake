@@ -41,8 +41,6 @@ option(DISABLE_DEBUG_THROW "Disable debug throw" OFF)
 
 # TODO
 # APP_STACK_MIN_SIZE
-# ENABLE_SDK_WERROR
-# TARGET_NAME
 
 # CMake migration
 set(CUSTOM_APP_FLAGS 0x000 CACHE STRING "Custom app flags")

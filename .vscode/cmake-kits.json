@@ -17,6 +17,9 @@
     {
         "name": "Ledger - Fuzzing",
         "description": "Build meant for fuzzing your Ledger app",
-        "toolchainFile": "${workspaceFolder}/toolchains/fuzzing.cmake"
+        "toolchainFile": "${workspaceFolder}/toolchains/fuzzing.cmake",
+        "cmakeSettings": {
+            "ENABLE_FUZZ": true
+        }
     }
 ]

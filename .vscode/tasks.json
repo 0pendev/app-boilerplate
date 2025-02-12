@@ -52,7 +52,7 @@
         {
             "label": "Ledger - Kill Emulator",
             "type": "shell",
-            "command": "pkill -f speculos",
+            "command": "pkill -f speculos || pkill -9 -f qemu-arm-static",
             "group": "test",
         },
         {
@@ -90,6 +90,11 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             }
+        },
+        {
+            "label": "Ledger - Install Emulator",
+            "type": "shell",
+            "command": "pip install --break-system-packages speculos"
         },
         {
             "label": "Ledger - Run with Emulator",

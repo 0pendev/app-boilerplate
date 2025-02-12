@@ -27,7 +27,7 @@ set(ICON_stax ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_32px.gif)
 set(ICON_flex ${CMAKE_CURRENT_SOURCE_DIR}/icons/app_boilerplate_40px.gif)
 set(ICON_NAME ${ICON_${TARGET_DEVICE}})
 file(GLOB_RECURSE APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
-set(APP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(APP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/src/transaction)
 
 include(options.cmake)
 include(ledger-sdk.cmake)
